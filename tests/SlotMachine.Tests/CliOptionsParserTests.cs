@@ -29,8 +29,6 @@ public class CliOptionsParserTests
     [Fact]
     public void Parse_ErrorWhenStopPositionIsNotNumber()
     {
-        var options = CliOptionsParser.Parse([]);
-
         Assert.Throws<FormatException>(() => CliOptionsParser.Parse(["--stops", "1", "r"]));
     }
 }

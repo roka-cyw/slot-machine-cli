@@ -19,7 +19,7 @@ public sealed class WaysWinCalculator
             var positionsByColumn = GetMatchingPositionsByColumn(screen, symbolForWays);
             var matchCount = positionsByColumn.Count;
 
-            if (!paytable.GetPayout(symbolForWays, matchCount, out var payout))
+            if (!paytable.TryGetPayout(symbolForWays, matchCount, out var payout))
                 continue;
 
             AddWayCombination(wins, positionsByColumn, symbolForWays, matchCount, payout, [], 0);
@@ -28,8 +28,6 @@ public sealed class WaysWinCalculator
         return wins;
     }
 
-    // Assignment case #1: Ways symbols are sym2 and sym7
-    // For the sym7 we have [[5, 10], [11], [7]] positions
     private static List<IReadOnlyList<int>> GetMatchingPositionsByColumn(SlotScreen screen,
         string symbol)
     {
@@ -53,7 +51,14 @@ public sealed class WaysWinCalculator
 
         return positionsByColumn;
     }
-    private static void AddWayCombination(List<WayWin> wins, IReadOnlyList<IReadOnlyList<int>> positionsByColumn, string symbol, int matchCount, int payout, List<int> currentPositions, int column)
+    private static void AddWayCombination(
+        List<WayWin> wins,
+        IReadOnlyList<IReadOnlyList<int>> positionsByColumn,
+        string symbol,
+        int matchCount,
+        int payout,
+        List<int> currentPositions,
+        int column)
     {
         if (column == positionsByColumn.Count)
         {
@@ -71,7 +76,14 @@ public sealed class WaysWinCalculator
         foreach (var position in positionsByColumn[column])
         {
             currentPositions.Add(position);
-            AddWayCombination(wins, positionsByColumn, symbol, matchCount, payout, currentPositions, column + 1);
+            AddWayCombination(
+                wins,
+                positionsByColumn,
+                symbol,
+                matchCount,
+                payout,
+                currentPositions,
+                column + 1);
             currentPositions.RemoveAt(currentPositions.Count - 1);
         }
     }
