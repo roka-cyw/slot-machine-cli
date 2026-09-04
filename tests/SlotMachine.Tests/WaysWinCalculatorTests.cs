@@ -7,6 +7,33 @@ namespace SlotMachine.Tests;
 public class WaysWinCalculatorTests
 {
     [Fact]
+    public void Calculate_DoesNotPayWhenMatchStartOnSecondColumn()
+    {
+        var screen = new SlotScreen
+        {
+            Rows = 1,
+            Columns = 4,
+            Symbols = ["sym9", "sym1", "sym1", "sym1"]
+        };
+
+        var paytable = new PayTable
+        {
+            Payouts = new Dictionary<string, IReadOnlyDictionary<int, int>>
+            {
+                ["sym1"] = new Dictionary<int, int>
+                {
+                    [3] = 10,
+                }
+            }
+        };
+
+        var calculator = new WaysWinCalculator();
+        var wins = calculator.Calculate(screen, paytable);
+
+        Assert.Empty(wins);
+    }
+
+    [Fact]
     public void Calculate_MatchFirstAssignmentWinningCase()
     {
         var config = GameConfigLoader.LoadFromFile("Config/slot-config.json");

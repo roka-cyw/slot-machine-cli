@@ -22,7 +22,7 @@ public sealed class WaysWinCalculator
             if (!paytable.GetPayout(symbolForWays, matchCount, out var payout))
                 continue;
 
-            AddWays(wins, positionsByColumn, symbolForWays, matchCount, payout, [], 0);
+            AddWayCombination(wins, positionsByColumn, symbolForWays, matchCount, payout, [], 0);
         }
 
         return wins;
@@ -53,7 +53,7 @@ public sealed class WaysWinCalculator
 
         return positionsByColumn;
     }
-    private static void AddWays(List<WayWin> wins, IReadOnlyList<IReadOnlyList<int>> positionsByColumn, string symbol, int matchCount, int payout, List<int> currentPositions, int column)
+    private static void AddWayCombination(List<WayWin> wins, IReadOnlyList<IReadOnlyList<int>> positionsByColumn, string symbol, int matchCount, int payout, List<int> currentPositions, int column)
     {
         if (column == positionsByColumn.Count)
         {
@@ -71,7 +71,7 @@ public sealed class WaysWinCalculator
         foreach (var position in positionsByColumn[column])
         {
             currentPositions.Add(position);
-            AddWays(wins, positionsByColumn, symbol, matchCount, payout, currentPositions, column + 1);
+            AddWayCombination(wins, positionsByColumn, symbol, matchCount, payout, currentPositions, column + 1);
             currentPositions.RemoveAt(currentPositions.Count - 1);
         }
     }
